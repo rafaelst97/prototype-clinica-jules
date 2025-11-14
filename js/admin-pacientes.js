@@ -81,14 +81,14 @@ function renderizarPacientes() {
         
         return `
             <tr style="${rowStyle}">
-                <td>${paciente.nome || 'N/A'}</td>
-                <td>${formatarCPF(paciente.cpf || '')}</td>
-                <td>${formatarTelefone(paciente.telefone || '')}</td>
-                <td>${planoSaude ? planoSaude.nome : 'Particular'}</td>
-                <td style="text-align: center;">${totalConsultas}</td>
-                <td style="text-align: center;">${consultasAgendadas}</td>
-                <td>${statusHtml}</td>
-                <td>${acoesHtml}</td>
+                <td data-label="Nome">${paciente.nome || 'N/A'}</td>
+                <td data-label="CPF">${formatarCPF(paciente.cpf || '')}</td>
+                <td data-label="Telefone">${formatarTelefone(paciente.telefone || '')}</td>
+                <td data-label="Convênio">${planoSaude ? planoSaude.nome : 'Particular'}</td>
+                <td data-label="Realizadas" style="text-align: center;">${totalConsultas}</td>
+                <td data-label="Agendadas" style="text-align: center;">${consultasAgendadas}</td>
+                <td data-label="Status">${statusHtml}</td>
+                <td data-label="Ações">${acoesHtml}</td>
             </tr>
         `;
     }).join('');

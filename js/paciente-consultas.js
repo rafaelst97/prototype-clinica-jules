@@ -56,11 +56,11 @@ function renderizarConsultasFuturas() {
         const dataHora = consulta.data_hora_inicio || consulta.data_hora;
         return `
             <tr>
-                <td>${formatDateTime(dataHora)}</td>
-                <td>${consulta.medico?.especialidade?.nome || 'N/A'}</td>
-                <td>${consulta.medico?.nome || 'N/A'} - CRM ${consulta.medico?.crm || ''}</td>
-                <td>${renderizarStatusBadge(consulta.status)}</td>
-                <td>
+                <td data-label="Data/Hora">${formatDateTime(dataHora)}</td>
+                <td data-label="Especialidade">${consulta.medico?.especialidade?.nome || 'N/A'}</td>
+                <td data-label="Médico">${consulta.medico?.nome || 'N/A'} - CRM ${consulta.medico?.crm || ''}</td>
+                <td data-label="Status">${renderizarStatusBadge(consulta.status)}</td>
+                <td data-label="Ações">
                     <button class="btn btn-secondary" style="padding: 5px 10px; margin-right: 5px;" 
                             onclick="abrirModalReagendar(${consultaId})">Reagendar</button>
                     <button class="btn btn-tertiary" style="padding: 5px 10px;" 
@@ -90,10 +90,10 @@ function renderizarHistorico() {
         const dataHora = consulta.data_hora_inicio || consulta.data_hora;
         return `
             <tr>
-                <td>${formatDateTime(dataHora)}</td>
-                <td>${consulta.medico?.especialidade?.nome || 'N/A'}</td>
-                <td>${consulta.medico?.nome || 'N/A'} - CRM ${consulta.medico?.crm || ''}</td>
-                <td>${renderizarStatusBadge(consulta.status)}</td>
+                <td data-label="Data/Hora">${formatDateTime(dataHora)}</td>
+                <td data-label="Especialidade">${consulta.medico?.especialidade?.nome || 'N/A'}</td>
+                <td data-label="Médico">${consulta.medico?.nome || 'N/A'} - CRM ${consulta.medico?.crm || ''}</td>
+                <td data-label="Status">${renderizarStatusBadge(consulta.status)}</td>
             </tr>
         `;
     }).join('');
