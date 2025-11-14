@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Paciente - Clínica Saúde+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Proteção de rota - executa antes do carregamento da página -->
+    <script src="../js/config.js"></script>`n    <script src="../js/api.js"></script>
+    <script src="../js/auth-guard.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">Clínica Saúde+ | Paciente</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Início</a></li>
+                <li><a href="agendar.html">Nova Consulta</a></li>
+                <li><a href="consultas.html">Minhas Consultas</a></li>
+                <li><a href="perfil.html">Meu Perfil</a></li>
+            </ul>
+            <div class="nav-user">
+                <span>Olá, <strong id="userName">Paciente</strong></span>
+                <a href="../index.html" class="btn btn-outline" style="padding: 5px 15px;">Sair</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">Painel do Paciente</h2>
+
+            <div class="alert alert-info">
+                <strong><i class="fas fa-info-circle"></i> Importante:</strong> Você pode ter no máximo 2 consultas futuras agendadas. Cancelamentos devem ser feitos com 24h de antecedência.
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="far fa-calendar-alt"></i> Próximas Consultas</h3>
+                    </div>
+                    <div id="proximasConsultas">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>Especialidade</th>
+                                    <th>Médico</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="proximas-consultas-tbody">
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <i class="fas fa-spinner fa-spin"></i> Carregando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-hospital"></i> Ações Rápidas</h3>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <a href="agendar.html" class="btn btn-primary">Agendar Nova Consulta</a>
+                        <a href="consultas.html" class="btn btn-secondary">Ver Histórico Completo</a>
+                        <a href="perfil.html" class="btn btn-outline">Editar Perfil</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-20">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-bar"></i> Resumo da Conta</h3>
+                </div>
+                <div class="grid-2" id="resumo-conta">
+                    <div>
+                        <p><strong>Total de Consultas Realizadas:</strong> <span id="total-realizadas">-</span></p>
+                        <p><strong>Consultas Agendadas:</strong> <span id="total-agendadas">-</span></p>
+                        <p><strong>Convênio:</strong> <span id="convenio-nome">-</span></p>
+                    </div>
+                    <div>
+                        <p><strong>Última Consulta:</strong> <span id="ultima-consulta">-</span></p>
+                        <p><strong>Especialidade:</strong> <span id="ultima-especialidade">-</span></p>
+                        <p><strong>Status:</strong> <span style="color: var(--tertiary-color);"><i class="fas fa-check-circle"></i> Ativo</span></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Clínica Saúde+ - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script src="../js/paciente-dashboard.js"></script>
+</body>
+</html>
+

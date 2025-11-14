@@ -1,0 +1,57 @@
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+backend/.env
+backend/__pycache__/
+*.egg-info/
+.pytest_cache/
+
+# Docker
+.docker/
+
+# Database
+*.db
+*.sqlite
+
+# Node modules
+node_modules/
+
+# Test screenshots (temporários)
+tests/screenshots/
+screenshots/
+*-error.png
+*-preenchido.png
+*-resultado.png
+test-responsive-*.png
+
+# Cache
+.cache/
+*.cover
+.coverage
+htmlcov/
+
+# Test files
+test_*.json
+*_test.json
+
+# Playwright
+playwright-report/
+test-results/

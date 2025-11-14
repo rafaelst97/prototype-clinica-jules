@@ -1,0 +1,30 @@
+Título: Arquitetura do Sistema - Clínica Saúde+
+Subtítulo: Sistema de Agendamento de Consultas Médicas
+
+Camada: Frontend
+  - Componente: Navegador Web
+    - Descrição: Interface do usuário, Páginas responsivas
+  - Componente: JavaScript
+    - Descrição: Lógica do frontend, Interação com usuário, Requisições HTTP
+
+Camada: Backend
+  - Componente: Python
+    - Descrição: Lógica de negócio, API REST, Processamento de dados
+
+Camada: Banco de Dados
+  - Componente: PostgreSQL
+    - Descrição: Armazenamento de dados, Consultas SQL, Persistência
+
+Fluxos de Comunicação:
+  - Navegador Web --(Executa)--> JavaScript
+  - JavaScript --(Atualiza Interface)--> Navegador Web
+  - Frontend (JavaScript) --(HTTP Requests)--> Backend (Python)
+  - Backend (Python) --(JSON Response)--> Frontend (JavaScript)
+  - Backend (Python) --(SQL Queries)--> Banco de Dados (PostgreSQL)
+  - Banco de Dados (PostgreSQL) --(Dados)--> Backend (Python)
+
+Tecnologias do Projeto:
+  - Frontend: JavaScript + HTML + CSS
+  - Backend: Python
+  - Banco de Dados: PostgreSQL
+  - Comunicação: HTTP/JSON

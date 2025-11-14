@@ -1,0 +1,92 @@
+Classe: Usuario
+  -id: int
+  -nome: string
+  -email: string
+  -senha: string (hash)
+  +fazerLogin(email, senha): boolean
+  +alterarSenha(novaSenha): void
+
+Classe: Pessoa
+  -cpf: string
+  -dataNascimento: Date
+  +getIdade(): int
+
+Classe: Paciente
+  -telefone: string
+  -estaBloqueado: boolean
+  +agendarConsulta(idMedico, dataHora): Consulta
+  +visualizarMinhasConsultas(): List<Consulta>
+  +cancelarConsulta(idConsulta): boolean
+  +reagendarConsulta(idConsulta, novaDataHora): boolean
+
+Classe: Medico
+  -crm: string
+  +gerenciarHorarios(listaHorarios): boolean
+  +visualizarConsultasAgendadas(): List<Consulta>
+  +registrarObservacao(idConsulta, texto): Observacao
+  +bloquearHorario(dataHora): void
+
+Classe: Administrador
+  -papel: string
+  +cadastrarMedico(dadosMedico): Medico
+  +gerenciarPlanoSaude(dadosPlano): PlanoSaude
+  +desbloquearPaciente(idPaciente): boolean
+  +gerarRelatorio(tipo, parametros): Relatorio
+
+Classe: HorarioTrabalho
+  -id: int
+  -diaSemana: int
+  -horaInicio: Time
+  -horaFim: Time
+
+Classe: Especialidade
+  -id: int
+  -nome: string
+
+Classe: Consulta
+  -id: int
+  -dataHoraInicio: DateTime
+  -dataHoraFim: DateTime
+  -status: string
+  +confirmar(): void
+  +cancelar(): void
+
+Classe: Observacao
+  -id: int
+  -descricao: string
+  -dataCriacao: DateTime
+
+Classe: PlanoSaude
+  -id: int
+  -nome: string
+  -cobertura: string
+
+Classe: Relatorio
+  -id: int
+  -tipo: string
+  -dataGeracao: Date
+  -dados: string
+
+Relações:
+
+- Herança:
+  - Paciente é um (herda de) Pessoa
+  - Medico é um (herda de) Pessoa
+  - Administrador é um (herda de) Usuario
+  - Pessoa é um (herda de) Usuario
+
+- Associações:
+  - Medico (1) -- (N) HorarioTrabalho
+    - (Medico 'possui' 1..N HorarioTrabalho)
+  - Medico (1) -- (1) Especialidade
+    - (Medico 'pertence a' 1 Especialidade)
+  - Medico (1) -- (0..N) Consulta
+    - (Medico 'atende' 0..N Consultas)
+  - Paciente (1) -- (0..N) Consulta
+    - (Paciente 'agenda' 0..N Consultas)
+  - Consulta (1) -- (0..1) Observacao
+    - (Consulta 'pode ter' 0..1 Observacao)
+  - Administrador (1) -- (0..N) PlanoSaude
+    - (Administrador 'cadastra' 0..N PlanoSaude)
+  - Administrador (1) -- (0..N) Relatorio
+    - (Administrador 'gera' 0..N Relatorio)

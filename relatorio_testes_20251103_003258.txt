@@ -1,0 +1,65 @@
+RELATÓRIO DE TESTES E2E - CLÍNICA SAÚDE+
+================================================================================
+
+[SUCESSO] INICIAL - Tela Principal
+  Detalhes: 3 módulos disponíveis
+
+[SUCESSO] PACIENTE - Cadastro
+  Detalhes: Email: paciente1762140693@teste.com
+
+[SUCESSO] PACIENTE - Login
+  Detalhes: Acesso ao dashboard
+
+[SUCESSO] PACIENTE - Dashboard
+  Detalhes: 3 cards visíveis
+
+[SUCESSO] PACIENTE - Perfil
+  Detalhes: Página carregada
+
+[SUCESSO] PACIENTE - Agendar Consulta
+  Detalhes: Interface disponível
+
+[SUCESSO] PACIENTE - Consultas
+  Detalhes: Lista carregada
+
+[SUCESSO] PACIENTE - Logout
+  Detalhes: Sessão encerrada
+
+[SUCESSO] MÉDICO - Login
+  Detalhes: CRM-12345
+
+[SUCESSO] MÉDICO - Dashboard
+  Detalhes: 0 opções de navegação
+
+[FALHA] MÉDICO - Agenda
+  Detalhes: 
+
+[FALHA] MÉDICO - Consultas
+  Detalhes: 
+
+[FALHA] MÉDICO - Horários
+  Detalhes: 
+
+[SUCESSO] MÉDICO - Logout
+  Detalhes: Sessão encerrada
+
+[SUCESSO] ADMIN - Login
+  Detalhes: admin@clinica.com
+
+[SUCESSO] ADMIN - Dashboard
+  Detalhes: 0 módulos
+
+[FALHA] ADMIN - Gerenciar Médicos
+  Detalhes: 
+
+[FALHA] ADMIN - Gerenciar Pacientes
+  Detalhes: 
+
+[FALHA] ADMIN - Relatórios
+  Detalhes: 
+
+[FALHA] ADMIN - Convênios
+  Detalhes: 
+
+
+Taxa de sucesso: 65.0%

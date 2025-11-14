@@ -1,0 +1,52 @@
+"""
+Configuração de fixtures para testes Selenium
+"""
+
+import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+
+@pytest.fixture(scope="session")
+def base_url():
+    """URL base da aplicação"""
+    return "http://localhost:8000"
+
+@pytest.fixture(scope="function")
+def driver():
+    """
+    Cria uma instância do Chrome WebDriver para cada teste
+    Usa ChromeDriverManager para baixar automaticamente o driver correto
+    """
+    chrome_options = Options()
+    # Modo headless para CI/CD (descomente se necessário)
+    # chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver.implicitly_wait(10)  # Espera implícita de 10 segundos
+    
+    yield driver
+    
+    # Teardown
+    time.sleep(0.5)  # Pequena pausa para ver o resultado
+    driver.quit()
+
+@pytest.fixture(scope="function")
+def limpar_localStorage(driver, base_url):
+    """Limpa o localStorage antes de cada teste"""
+    try:
+        # Navega para a página inicial antes de tentar limpar
+        driver.get(base_url)
+        driver.execute_script("localStorage.clear();")
+        driver.delete_all_cookies()
+    except Exception as e:
+        print(f"⚠️ Aviso ao limpar localStorage: {e}")

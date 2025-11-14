@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Horários - Clínica Saúde+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/auth-guard.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">Clínica Saúde+ | Médico</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Início</a></li>
+                <li><a href="agenda.html">Minha Agenda</a></li>
+                <li><a href="consultas.html">Consultas</a></li>
+                <li><a href="horarios.html">Horários</a></li>
+            </ul>
+            <div class="nav-user">
+                <span><!-- Carregado via JavaScript --></span>
+                <a href="../index.html" class="btn btn-outline" style="padding: 5px 15px;">Sair</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">Gerenciar Horários de Atendimento</h2>
+
+            <div class="alert alert-info">
+                <strong><i class="fas fa-info-circle"></i> Informação:</strong> Configure seus horários disponíveis semanalmente. O sistema bloqueará automaticamente conflitos de agendamento.
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="far fa-clock"></i> Horários Semanais</h3>
+                </div>
+
+                <form id="horariosForm">
+                    <!-- Segunda-feira -->
+                    <div style="border: 2px solid var(--light-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <input type="checkbox" id="segunda" checked style="width: auto; margin-right: 10px;">
+                            <label for="segunda" style="margin: 0; font-weight: bold; font-size: 1.1em;">Segunda-feira</label>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Horário Início</label>
+                                <input type="time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Fim</label>
+                                <input type="time" value="12:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Início (Tarde)</label>
+                                <input type="time" value="14:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Fim (Tarde)</label>
+                                <input type="time" value="18:00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terça-feira -->
+                    <div style="border: 2px solid var(--light-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <input type="checkbox" id="terca" checked style="width: auto; margin-right: 10px;">
+                            <label for="terca" style="margin: 0; font-weight: bold; font-size: 1.1em;">Terça-feira</label>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Horário Início</label>
+                                <input type="time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Fim</label>
+                                <input type="time" value="12:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Início (Tarde)</label>
+                                <input type="time" value="14:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Fim (Tarde)</label>
+                                <input type="time" value="18:00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quarta-feira -->
+                    <div style="border: 2px solid var(--light-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <input type="checkbox" id="quarta" checked style="width: auto; margin-right: 10px;">
+                            <label for="quarta" style="margin: 0; font-weight: bold; font-size: 1.1em;">Quarta-feira</label>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Horário Início</label>
+                                <input type="time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Fim</label>
+                                <input type="time" value="12:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Início (Tarde)</label>
+                                <input type="time" value="14:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Fim (Tarde)</label>
+                                <input type="time" value="18:00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quinta-feira -->
+                    <div style="border: 2px solid var(--light-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <input type="checkbox" id="quinta" checked style="width: auto; margin-right: 10px;">
+                            <label for="quinta" style="margin: 0; font-weight: bold; font-size: 1.1em;">Quinta-feira</label>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Horário Início</label>
+                                <input type="time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Fim</label>
+                                <input type="time" value="12:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Início (Tarde)</label>
+                                <input type="time" value="14:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Fim (Tarde)</label>
+                                <input type="time" value="18:00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sexta-feira -->
+                    <div style="border: 2px solid var(--light-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <input type="checkbox" id="sexta" checked style="width: auto; margin-right: 10px;">
+                            <label for="sexta" style="margin: 0; font-weight: bold; font-size: 1.1em;">Sexta-feira</label>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Horário Início</label>
+                                <input type="time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Horário Fim</label>
+                                <input type="time" value="12:00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="dashboard.html" class="btn btn-outline">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Salvar Horários</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card mt-20" id="bloqueio">
+                <div class="card-header">
+                    <h3><i class="fas fa-ban"></i> Bloquear Horário Específico</h3>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong><i class="fas fa-exclamation-triangle"></i> Atenção:</strong> Use esta função para bloquear horários em casos de imprevistos, férias ou compromissos pessoais. Pacientes não poderão agendar nos horários bloqueados.
+                </div>
+
+                <form id="form-bloquear">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="data-bloqueio">Data *</label>
+                            <input type="date" id="data-bloqueio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora-inicio-bloqueio">Hora Início *</label>
+                            <input type="time" id="hora-inicio-bloqueio" required>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="hora-fim-bloqueio">Hora Fim *</label>
+                            <input type="time" id="hora-fim-bloqueio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="motivo-bloqueio">Motivo</label>
+                            <input type="text" id="motivo-bloqueio" placeholder="Ex: Compromisso pessoal, Reunião">
+                        </div>
+                    </div>
+
+                    <div id="bloqueio-error-message" class="error-message" style="display: none;"></div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-tertiary">
+                            <i class="fas fa-ban"></i> Bloquear Período
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card mt-20">
+                <div class="card-header">
+                    <h3><i class="fas fa-list"></i> Bloqueios Ativos</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Período</th>
+                                <th>Motivo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-bloqueios">
+                            <tr>
+                                <td colspan="4" class="text-center">Carregando bloqueios...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Clínica Saúde+ - Todos os direitos reservados</p>
+        </footer>
+    </div>    <script src="../js/config.js"></script>`n    <script src="../js/api.js"></script>
+
+
+    <script src="../js/medico-horarios.js"></script>
+</body>
+</html>
+

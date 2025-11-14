@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Cadastro</title>
+</head>
+<body>
+    <h1>Teste de Cadastro</h1>
+    <button onclick="testarAPI()">Testar API</button>
+    <button onclick="testarCadastro()">Testar Cadastro</button>
+    <pre id="resultado"></pre>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        
+        async function testarAPI() {
+            try {
+                const response = await fetch(`${API_BASE}/pacientes/planos-saude`);
+                const data = await response.json();
+                document.getElementById('resultado').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('resultado').textContent = 'Erro: ' + error.message;
+            }
+        }
+        
+        async function testarCadastro() {
+            const dados = {
+                nome: "Teste Usuário",
+                email: "teste" + Date.now() + "@email.com",
+                senha: "senha123",
+                cpf: "12345678901",
+                data_nascimento: "1990-01-01",
+                telefone: "47999999999",
+                id_plano_saude_fk: 1
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/pacientes/cadastro`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+                
+                const data = await response.json();
+                document.getElementById('resultado').textContent = 
+                    `Status: ${response.status}\n` +
+                    JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('resultado').textContent = 'Erro: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

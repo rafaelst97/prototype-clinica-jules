@@ -1,0 +1,78 @@
+﻿========================================
+CLINICA SAUDE+ - RENDER DEPLOY REFERENCE
+========================================
+
+DATA DO DEPLOY: 09/11/2025 16:55
+REPOSITORIO: rafaelst97/prototype-melhoria
+BRANCH: main
+CONFIGURACAO: render.yaml
+
+========================================
+URLS DO PROJETO (apos deploy):
+========================================
+
+Frontend:
+https://clinica-saude-frontend.onrender.com
+
+Backend API:
+https://clinica-saude-backend.onrender.com
+
+API Documentation:
+https://clinica-saude-backend.onrender.com/docs
+
+Render Dashboard:
+https://dashboard.render.com
+
+========================================
+USUARIOS DE TESTE:
+========================================
+
+ADMIN
+Email: admin@clinica.com
+Senha: admin123
+
+MEDICO
+Email: joao1@clinica.com
+Senha: medico123
+
+PACIENTE
+Email: maria@email.com
+Senha: paciente123
+
+========================================
+COMANDOS UTEIS:
+========================================
+
+Testar backend:
+curl https://clinica-saude-backend.onrender.com/health
+
+Ver logs (no Render Dashboard):
+Services > clinica-saude-backend > Logs
+
+Popular banco de dados (Render Shell):
+python populate_test_data.py
+
+========================================
+TROUBLESHOOTING:
+========================================
+
+1. Backend nao inicia?
+   - Verifique DATABASE_URL nas env vars
+   - Aguarde PostgreSQL terminar (2-3 min)
+
+2. Frontend nao carrega?
+   - Aguarde build completar
+   - Verifique logs no dashboard
+
+3. CORS error?
+   - Ja configurado em backend/app/main.py
+   - Deve funcionar automaticamente
+
+========================================
+SUPORTE:
+========================================
+
+Documentacao Render: https://render.com/docs
+Issues do Projeto: https://github.com/rafaelst97/prototype-melhoria/issues
+
+========================================

@@ -1,0 +1,19 @@
+{
+  "name": "clinica-teste-browser",
+  "version": "1.0.0",
+  "description": "Testes de navegador para Clínica Saúde+",
+  "scripts": {
+    "test": "node tests/e2e/test-browser.js",
+    "test:requisitos": "node tests/e2e/test-requisitos.js",
+    "test:completo": "node tests/e2e/test-completo-db-responsive.js",
+    "test:conformidade": "node tests/e2e/test-conformidade-prompts.js",
+    "test:e2e": "node tests/e2e/test-e2e-completo.js",
+    "test:manual": "node tests/e2e/test-manual-interativo.js",
+    "test:medico": "node tests/e2e/test-medico-completo.js",
+    "test:debug": "node --inspect-brk tests/e2e/test-browser.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "playwright": "^1.40.0"
+  }
+}

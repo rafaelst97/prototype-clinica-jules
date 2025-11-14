@@ -1,0 +1,149 @@
+RELATÓRIO DE TESTES E2E - CLÍNICA SAÚDE+
+================================================================================
+
+[SUCESSO] INICIAL - Tela Principal
+  Detalhes: 3 módulos disponíveis
+
+[SUCESSO] PACIENTE - Cadastro
+  Detalhes: Email: paciente1762140447@teste.com
+
+[SUCESSO] PACIENTE - Login
+  Detalhes: Acesso ao dashboard
+
+[SUCESSO] PACIENTE - Dashboard
+  Detalhes: 3 cards visíveis
+
+[SUCESSO] PACIENTE - Perfil
+  Detalhes: Página carregada
+
+[SUCESSO] PACIENTE - Agendar Consulta
+  Detalhes: Interface disponível
+
+[SUCESSO] PACIENTE - Consultas
+  Detalhes: Lista carregada
+
+[SUCESSO] PACIENTE - Logout
+  Detalhes: Sessão encerrada
+
+[SUCESSO] MÉDICO - Login
+  Detalhes: CRM-12345
+
+[SUCESSO] MÉDICO - Dashboard
+  Detalhes: 0 opções de navegação
+
+[FALHA] MÉDICO - Agenda
+  Detalhes: Alert Text: ERRO: Acesso não autorizado
+Message: unexpected alert open: {Alert text : ERRO: Acesso não autorizado}
+  (Session info: chrome=142.0.7444.59)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff779817a35
+	0x7ff779817a90
+	0x7ff7795916ad
+	0x7ff77963c3a2
+	0x7ff7795db068
+	0x7ff7795dbe93
+	0x7ff779ad29d0
+	0x7ff779acce50
+	0x7ff779aecc45
+	0x7ff7798330ce
+	0x7ff77983adbf
+	0x7ff779820c14
+	0x7ff779820dcf
+	0x7ff779806828
+	0x7ffe1cf0e8d7
+	0x7ffe1e68c53c
+
+
+[FALHA] MÉDICO - Consultas
+  Detalhes: Alert Text: ERRO: Erro ao carregar agenda.
+Message: unexpected alert open: {Alert text : ERRO: Erro ao carregar agenda.}
+  (Session info: chrome=142.0.7444.59)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff779817a35
+	0x7ff779817a90
+	0x7ff7795916ad
+	0x7ff77963c3a2
+	0x7ff7795db068
+	0x7ff7795dbe93
+	0x7ff779ad29d0
+	0x7ff779acce50
+	0x7ff779aecc45
+	0x7ff7798330ce
+	0x7ff77983adbf
+	0x7ff779820c14
+	0x7ff779820dcf
+	0x7ff779806828
+	0x7ffe1cf0e8d7
+	0x7ffe1e68c53c
+
+
+[FALHA] MÉDICO - Horários
+  Detalhes: Alert Text: ERRO: Acesso não autorizado
+Message: unexpected alert open: {Alert text : ERRO: Acesso não autorizado}
+  (Session info: chrome=142.0.7444.59)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff779817a35
+	0x7ff779817a90
+	0x7ff7795916ad
+	0x7ff77963c3a2
+	0x7ff7795db068
+	0x7ff7795dbe93
+	0x7ff779ad29d0
+	0x7ff779acce50
+	0x7ff779aecc45
+	0x7ff7798330ce
+	0x7ff77983adbf
+	0x7ff779820c14
+	0x7ff779820dcf
+	0x7ff779806828
+	0x7ffe1cf0e8d7
+	0x7ffe1e68c53c
+
+
+[FALHA] MÉDICO - Logout
+  Detalhes: Alert Text: ERRO: Erro ao carregar horários.
+Message: unexpected alert open: {Alert text : ERRO: Erro ao carregar horários.}
+  (Session info: chrome=142.0.7444.59)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff779817a35
+	0x7ff779817a90
+	0x7ff7795916ad
+	0x7ff77963c3a2
+	0x7ff7795db068
+	0x7ff7795dbe93
+	0x7ff779ad29d0
+	0x7ff779acce50
+	0x7ff779aecc45
+	0x7ff7798330ce
+	0x7ff77983adbf
+	0x7ff779820c14
+	0x7ff779820dcf
+	0x7ff779806828
+	0x7ffe1cf0e8d7
+	0x7ffe1e68c53c
+
+
+[SUCESSO] ADMIN - Login
+  Detalhes: admin@clinica.com
+
+[SUCESSO] ADMIN - Dashboard
+  Detalhes: 0 módulos
+
+[FALHA] ADMIN - Gerenciar Médicos
+  Detalhes: 
+
+[FALHA] ADMIN - Gerenciar Pacientes
+  Detalhes: 
+
+[FALHA] ADMIN - Relatórios
+  Detalhes: 
+
+[SUCESSO] ADMIN - Convênios
+  Detalhes: Interface carregada
+
+
+Taxa de sucesso: 65.0%

@@ -1,0 +1,63 @@
+Entidade: ESPECIALIDADE
+  - id_especialidade (PK)
+  - nome (UK)
+
+Entidade: PLANO_SAUDE
+  - id_plano_saude (PK)
+  - nome
+  - cobertura_info
+
+Entidade: ADMINISTRADOR
+  - id_admin (PK)
+  - nome
+  - email (UK)
+  - senha_hash
+  - papel
+
+Entidade: MEDICO
+  - id_medico (PK)
+  - nome
+  - cpf (UK)
+  - email (UK)
+  - senha_hash
+  - crm (UK)
+  - *id_especialidade_fk* (FK)
+
+Entidade: PACIENTE
+  - id_paciente (PK)
+  - nome
+  - cpf (UK)
+  - email (UK)
+  - senha_hash
+  - telefone
+  - data_nascimento
+  - esta_bloqueado
+  - *id_plano_saude_fk* (FK, Nullable)
+
+Entidade: RELATORIO
+  - id_relatorio (PK)
+  - tipo
+  - data_geracao
+  - dados_resultado
+  - *id_admin_fk* (FK)
+
+Entidade: HORARIO_TRABALHO
+  - id_horario (PK)
+  - dia_semana
+  - hora_inicio
+  - hora_fim
+  - *id_medico_fk* (FK)
+
+Entidade: CONSULTA
+  - id_consulta (PK)
+  - data_hora_inicio
+  - data_hora_fim
+  - status
+  - *id_paciente_fk* (FK)
+  - *id_medico_fk* (FK)
+
+Entidade: OBSERVACAO
+  - id_observacao (PK)
+  - descricao
+  - data_criacao
+  - *id_consulta_fk* (FK)

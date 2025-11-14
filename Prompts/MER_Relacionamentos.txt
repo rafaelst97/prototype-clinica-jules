@@ -1,0 +1,22 @@
+Relacionamentos (baseado nas Chaves Estrangeiras):
+
+- MEDICO (N) --- (1) ESPECIALIDADE
+  (MEDICO.id_especialidade_fk -> ESPECIALIDADE.id_especialidade)
+
+- PACIENTE (N) --- (1) PLANO_SAUDE (Opcional)
+  (PACIENTE.id_plano_saude_fk -> PLANO_SAUDE.id_plano_saude)
+
+- RELATORIO (N) --- (1) ADMINISTRADOR
+  (RELATORIO.id_admin_fk -> ADMINISTRADOR.id_admin)
+
+- HORARIO_TRABALHO (N) --- (1) MEDICO
+  (HORARIO_TRABALHO.id_medico_fk -> MEDICO.id_medico)
+
+- CONSULTA (N) --- (1) PACIENTE
+  (CONSULTA.id_paciente_fk -> PACIENTE.id_paciente)
+
+- CONSULTA (N) --- (1) MEDICO
+  (CONSULTA.id_medico_fk -> MEDICO.id_medico)
+
+- OBSERVACAO (N) --- (1) CONSULTA
+  (OBSERVACAO.id_consulta_fk -> CONSULTA.id_consulta)

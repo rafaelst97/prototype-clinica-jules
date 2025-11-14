@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .error {
+            border-left-color: #f44336;
+            background: #ffebee;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste de API - Clínica Saúde+</h1>
+
+    <div class="test-section">
+        <h2>1️⃣ Teste: Carregar Planos de Saúde</h2>
+        <button onclick="testarPlanosSaude()">Carregar Planos</button>
+        <div id="resultado-planos" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2️⃣ Teste: Cadastro de Paciente</h2>
+        <button onclick="testarCadastro()">Cadastrar Paciente Teste</button>
+        <div id="resultado-cadastro" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3️⃣ Teste: Login de Paciente</h2>
+        <button onclick="testarLogin()">Fazer Login Teste</button>
+        <div id="resultado-login" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        async function testarPlanosSaude() {
+            const resultado = document.getElementById('resultado-planos');
+            resultado.style.display = 'block';
+            resultado.className = 'result';
+            resultado.textContent = '⏳ Carregando...';
+
+            try {
+                const response = await fetch(`${API_BASE}/pacientes/planos-saude`);
+                const data = await response.json();
+                
+                resultado.textContent = `✅ Sucesso!\n\n` +
+                    `Status: ${response.status}\n` +
+                    `Total de planos: ${data.length}\n\n` +
+                    JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultado.className = 'result error';
+                resultado.textContent = `❌ Erro!\n\n${error.message}\n\n${error.stack}`;
+            }
+        }
+
+        async function testarCadastro() {
+            const resultado = document.getElementById('resultado-cadastro');
+            resultado.style.display = 'block';
+            resultado.className = 'result';
+            resultado.textContent = '⏳ Cadastrando...';
+
+            const timestamp = Date.now();
+            const dados = {
+                nome: "Teste Usuario",
+                email: `teste${timestamp}@teste.com`,
+                cpf: `${timestamp.toString().slice(-11)}`,
+                senha: "senha123",
+                telefone: "47999999999",
+                data_nascimento: "1990-01-01",
+                id_plano_saude_fk: null
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/pacientes/cadastro`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultado.textContent = `✅ Cadastro realizado!\n\n` +
+                        `Status: ${response.status}\n\n` +
+                        `Dados cadastrados:\n${JSON.stringify(dados, null, 2)}\n\n` +
+                        `Resposta:\n${JSON.stringify(data, null, 2)}`;
+                    
+                    // Salvar email para teste de login
+                    window.lastEmail = dados.email;
+                    window.lastSenha = dados.senha;
+                } else {
+                    resultado.className = 'result error';
+                    resultado.textContent = `❌ Erro no cadastro!\n\n` +
+                        `Status: ${response.status}\n\n` +
+                        JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultado.className = 'result error';
+                resultado.textContent = `❌ Erro!\n\n${error.message}\n\n${error.stack}`;
+            }
+        }
+
+        async function testarLogin() {
+            const resultado = document.getElementById('resultado-login');
+            resultado.style.display = 'block';
+            resultado.className = 'result';
+            
+            if (!window.lastEmail || !window.lastSenha) {
+                resultado.textContent = '⚠️ Faça um cadastro primeiro usando o botão acima!';
+                return;
+            }
+
+            resultado.textContent = '⏳ Fazendo login...';
+
+            const dados = {
+                email: window.lastEmail,
+                senha: window.lastSenha
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultado.textContent = `✅ Login realizado!\n\n` +
+                        `Status: ${response.status}\n\n` +
+                        `Credenciais usadas:\n${JSON.stringify(dados, null, 2)}\n\n` +
+                        `Token recebido: ${data.access_token ? 'SIM ✓' : 'NÃO ✗'}\n` +
+                        `User Type: ${data.user_type}\n` +
+                        `User ID: ${data.user_id}\n\n` +
+                        `Resposta completa:\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultado.className = 'result error';
+                    resultado.textContent = `❌ Erro no login!\n\n` +
+                        `Status: ${response.status}\n\n` +
+                        JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultado.className = 'result error';
+                resultado.textContent = `❌ Erro!\n\n${error.message}\n\n${error.stack}`;
+            }
+        }
+    </script>
+</body>
+</html>

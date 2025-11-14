@@ -1,0 +1,65 @@
+UNIVALI
+Universidade do Vale do Itajaí - UNIVALI
+Escola Politécnica
+Disciplina: Melhoria de Processos de Software
+Profa: Daniela S. Moreira da Silva
+Estudo de Caso: Clínica Saúde+
+A Clínica Saúde+ é uma clínica de especialidades médicas que atende pacientes de
+forma particular e por convênios.
+Atualmente, o agendamento de consultas é feito de
+forma manual, por telefone ou presencialmente, e registrado em uma agenda física.
+Esse processo tem gerado uma série de problemas, como:
+conflito de horários,
+dificuldade no controle de consultas canceladas ou remarcadas,
+falta de relatórios gerenciais para os administradores,
+tempo elevado de espera para pacientes conseguirem um atendimento.
+Para resolver esses problemas, a clínica contratou sua empresa de software para
+desenvolver um sistema web responsivo de Agendamento de Consultas Médicas.
+Objetivo
+Fornecer um sistema que permita aos pacientes agendarem consultas de forma simples
+e rápida, e que dê aos médicos e à administração da clínica maior controle sobre
+horários, disponibilidade e relatórios.
+Funcionalidades Principais
+1. Módulo Paciente
+Cadastro com CPF, nome completo, telefone, e-mail e convênio (se houver).
+Login com e-mail e senha alfanumérica (8 a 20 caracteres).
+Agendamento de consultas escolhendo especialidade médica, médico e horário
+disponível.
+Visualização de consultas futuras e passadas.
+Cancelamento ou remarcação de consultas (até 24h de antecedência).
+2. Módulo Médico
+Cadastro e edição de horários de atendimento (agenda disponível).
+Visualização das consultas agendadas por data.
+Registro de observações após a consulta (visível apenas para o médico e
+administração).
+Possibilidade de bloquear horários em caso de imprevistos.
+3. Módulo Administrativo (Clínica)
+Cadastro e edição de médicos (nome, CRM, especialidade, convênio aceito).
+Relatórios em PDF, incluindo:
+Quantidade de consultas por médico ou especialidade;
+Taxa de cancelamentos e remarcações;
+Pacientes que mais consultaram no período.
+Controle de convênios aceitos e tipos de atendimento.
+Regras de Negócio
+•
+Consultas só podem ser canceladas/remarcadas até 24h antes do horário
+agendado.
+• Cada paciente pode ter no máximo 2 consultas futuras agendadas por vez.
+UNIVALI
+Universidade do Vale do Itajaí - UNIVALI
+Escola Politécnica
+Disciplina: Melhoria de Processos de Software
+Profa: Daniela S. Moreira da Silva
+Cada médico define seus horários disponíveis semanalmente, e o sistema deve
+evitar conflitos de agendamento.
+Se o paciente faltar a 3 consultas seguidas sem aviso, o sistema deve bloquear
+novos agendamentos até liberação pela administração.
+Dinâmica do Estudo de Caso
+1. Implementar o sistema considerando as funcionalidades descritas.
+2. Gerenciar o projeto aplicando o processo definido na disciplina de Melhoria de
+Processos de Software, com foco em:
+i) Planejamento de escopo e requisitos;
+ii) Cronograma de entregas;
+iii) Métricas de qualidade (ex.: número de requisitos atendidos, defeitos
+encontrados, satisfação do usuário);
+iv) Relatório de acompanhamento e documentação final.

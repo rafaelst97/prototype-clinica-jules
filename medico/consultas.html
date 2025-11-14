@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas - Clínica Saúde+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/auth-guard.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">Clínica Saúde+ | Médico</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Início</a></li>
+                <li><a href="agenda.html">Minha Agenda</a></li>
+                <li><a href="consultas.html">Consultas</a></li>
+                <li><a href="horarios.html">Horários</a></li>
+            </ul>
+            <div class="nav-user">
+                <span><!-- Carregado via JavaScript --></span>
+                <a href="../index.html" class="btn btn-outline" style="padding: 5px 15px;">Sair</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">Minhas Consultas</h2>
+
+            <!-- Filtro por Data -->
+            <div class="card" style="max-width: 800px; margin: 0 auto 20px;">
+                <div class="card-header">
+                    <h3>Filtrar Consultas</h3>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="dataInicio">Data Início</label>
+                        <input type="date" id="dataInicio" name="dataInicio">
+                    </div>
+                    <div class="form-group">
+                        <label for="dataFim">Data Fim</label>
+                        <input type="date" id="dataFim" name="dataFim">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" onclick="filtrarConsultas()">
+                        <i class="fas fa-filter"></i> Filtrar
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="limparFiltro()">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                </div>
+            </div>
+
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <div class="card-header">
+                    <h3>Lista de Consultas</h3>
+                </div>
+
+                <div id="listaConsultas">
+                    <!-- As consultas serão carregadas aqui via JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Clínica Saúde+ - Todos os direitos reservados</p>
+        </footer>
+    </div>
+    
+    <script src="../js/config.js"></script>`n    <script src="../js/api.js"></script>
+    <script src="../js/medico-consultas.js"></script>
+</body>
+</html>
+

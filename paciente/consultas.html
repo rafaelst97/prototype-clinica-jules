@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Consultas - Clínica Saúde+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/config.js"></script>`n    <script src="../js/api.js"></script>
+    <script src="../js/auth-guard.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">Clínica Saúde+ | Paciente</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Início</a></li>
+                <li><a href="agendar.html">Nova Consulta</a></li>
+                <li><a href="consultas.html">Minhas Consultas</a></li>
+                <li><a href="perfil.html">Meu Perfil</a></li>
+            </ul>
+            <div class="nav-user">
+                <span>Olá, <strong>Paciente</strong></span>
+                <a href="../index.html" class="btn btn-outline" style="padding: 5px 15px;">Sair</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">Minhas Consultas</h2>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="far fa-calendar-alt"></i> Consultas Futuras</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Especialidade</th>
+                                <th>Médico</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Carregando consultas...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mt-20">
+                <div class="card-header">
+                    <h3><i class="fas fa-history"></i> Histórico de Consultas</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Especialidade</th>
+                                <th>Médico</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Carregando histórico...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="text-center mt-20">
+                <a href="agendar.html" class="btn btn-primary">Agendar Nova Consulta</a>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Clínica Saúde+ - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <!-- Modal de Reagendamento -->
+    <div id="modal-reagendar" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal" onclick="fecharModalReagendar()">&times;</span>
+            <h3 style="color: var(--primary-color); margin-bottom: 20px;">
+                <i class="fas fa-calendar-alt"></i> Reagendar Consulta
+            </h3>
+            
+            <div id="info-consulta-atual" style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <p style="margin: 5px 0;"><strong>Consulta Atual:</strong></p>
+                <p id="detalhes-consulta-atual" style="margin: 5px 0; color: #555;"></p>
+                <p style="margin: 10px 0 0 0; color: #2196F3; font-size: 0.9em;">
+                    <i class="fas fa-info-circle"></i> Os campos abaixo já estão preenchidos com a data e horário atuais. 
+                    Você pode alterá-los conforme necessário.
+                </p>
+            </div>
+
+            <form id="form-reagendar">
+                <div class="form-group">
+                    <label for="nova-data">Nova Data *</label>
+                    <input type="date" id="nova-data" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nova-hora">Novo Horário *</label>
+                    <select id="nova-hora" required>
+                        <option value="">Selecione um horário</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="motivo-reagendamento">Motivo do Reagendamento (opcional)</label>
+                    <textarea id="motivo-reagendamento" rows="3" placeholder="Descreva o motivo do reagendamento..."></textarea>
+                </div>
+
+                <div id="reagendar-error-message" class="error-message" style="display: none;"></div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalReagendar()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Confirmar Reagendamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Cancelamento -->
+    <div id="modal-cancelar" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal" onclick="fecharModalCancelar()">&times;</span>
+            <h3 style="color: var(--accent-color); margin-bottom: 20px;">
+                <i class="fas fa-exclamation-triangle"></i> Cancelar Consulta
+            </h3>
+            
+            <div id="info-consulta-cancelar" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <p style="margin: 5px 0;"><strong>Atenção:</strong> Esta ação não pode ser desfeita.</p>
+                <p id="detalhes-consulta-cancelar" style="margin: 5px 0; color: #555;"></p>
+            </div>
+
+            <form id="form-cancelar">
+                <div class="form-group">
+                    <label for="motivo-cancelamento">Motivo do Cancelamento (opcional)</label>
+                    <textarea id="motivo-cancelamento" rows="3" placeholder="Descreva o motivo do cancelamento..."></textarea>
+                </div>
+
+                <div id="cancelar-error-message" class="error-message" style="display: none;"></div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalCancelar()">Voltar</button>
+                    <button type="submit" class="btn btn-tertiary">Confirmar Cancelamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/paciente-consultas.js"></script>
+</body>
+</html>
+

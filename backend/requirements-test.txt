@@ -1,0 +1,29 @@
+"""
+Requirements adicionais para testes completos
+"""
+# Testes
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-asyncio==0.21.1
+pytest-html==4.1.1
+
+# Selenium para testes E2E
+selenium==4.15.2
+webdriver-manager==4.0.1
+pytest-selenium==4.0.1
+
+# Segurança
+bandit==1.7.5
+safety==2.3.5
+
+# Performance
+locust==2.17.0
+pytest-benchmark==4.0.0
+
+# Banco de dados
+psycopg2-binary==2.9.9
+sqlalchemy-utils==0.41.1
+
+# Utilitários
+faker==20.0.3
+factory-boy==3.3.0

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Consulta - Clínica Saúde+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Scripts necessários -->
+    <script src="../js/config.js"></script>`n    <script src="../js/api.js"></script>
+    <script src="../js/auth-guard.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">Clínica Saúde+ | Paciente</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Início</a></li>
+                <li><a href="agendar.html">Nova Consulta</a></li>
+                <li><a href="consultas.html">Minhas Consultas</a></li>
+                <li><a href="perfil.html">Meu Perfil</a></li>
+            </ul>
+            <div class="nav-user">
+                <span>Olá, <strong>Paciente</strong></span>
+                <a href="../index.html" class="btn btn-outline" style="padding: 5px 15px;">Sair</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">Agendar Nova Consulta</h2>
+
+            <div class="card" style="max-width: 700px; margin: 0 auto;">
+                <form id="agendarForm">
+                    <div class="form-group">
+                        <label for="especialidade">Especialidade *</label>
+                        <select id="especialidade" name="especialidade" required>
+                            <option value="">Carregando especialidades...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="medico">Médico *</label>
+                        <select id="medico" name="medico" required disabled>
+                            <option value="">Primeiro selecione uma especialidade</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="data">Data *</label>
+                        <input type="date" id="data" name="data" required disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="horario">Horário *</label>
+                        <select id="horario" name="horario" required disabled>
+                            <option value="">Primeiro selecione a data</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="motivo">Motivo da Consulta (opcional)</label>
+                        <textarea id="motivo" name="motivo" rows="4" placeholder="Descreva os sintomas ou motivo da consulta"></textarea>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Atenção:</strong> Você pode ter no máximo 2 consultas futuras agendadas. Cancelamentos devem ser feitos com 24h de antecedência.
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="dashboard.html" class="btn btn-outline">Cancelar</a>
+                        <button id="btnAgendar" type="submit" class="btn btn-primary">Confirmar Agendamento</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Clínica Saúde+ - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script src="../js/paciente-agendar.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Clínica Saúde+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/config.js"></script>`n    <script src="../js/api.js"></script>
+    <script src="../js/auth-guard.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">Clínica Saúde+ | Administração</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Início</a></li>
+                <li><a href="medicos.html">Médicos</a></li>
+                <li><a href="pacientes.html">Pacientes</a></li>
+                <li><a href="relatorios.html">Relatórios</a></li>
+                <li><a href="convenios.html">Convênios</a></li>
+            </ul>
+            <div class="nav-user">
+                <span><strong>Administrador</strong></span>
+                <a href="../index.html" class="btn btn-outline" style="padding: 5px 15px;">Sair</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">Painel Administrativo</h2>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Estatísticas Gerais</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 5px; text-align: center;">
+                            <h4 style="color: var(--secondary-color); margin-bottom: 5px; font-size: 2em;"><i class="fas fa-spinner fa-spin"></i></h4>
+                            <p>Pacientes Cadastrados</p>
+                        </div>
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 5px; text-align: center;">
+                            <h4 style="color: var(--tertiary-color); margin-bottom: 5px; font-size: 2em;"><i class="fas fa-spinner fa-spin"></i></h4>
+                            <p>Médicos Ativos</p>
+                        </div>
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 5px; text-align: center;">
+                            <h4 style="color: var(--primary-color); margin-bottom: 5px; font-size: 2em;"><i class="fas fa-spinner fa-spin"></i></h4>
+                            <p>Consultas Este Mês</p>
+                        </div>
+                        <div style="padding: 15px; background: var(--light-bg); border-radius: 5px; text-align: center;">
+                            <h4 style="color: var(--accent-color); margin-bottom: 5px; font-size: 2em;"><i class="fas fa-spinner fa-spin"></i></h4>
+                            <p>Cancelamentos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-tasks"></i> Ações Rápidas</h3>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <a href="medicos.html" class="btn btn-primary">Cadastrar Médico</a>
+                        <a href="relatorios.html" class="btn btn-secondary">Gerar Relatório</a>
+                        <a href="convenios.html" class="btn btn-tertiary">Gerenciar Convênios</a>
+                        <a href="pacientes.html" class="btn btn-outline">Ver Pacientes</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-20">
+                <div class="card-header">
+                    <h3><i class="far fa-calendar-alt"></i> Consultas Recentes</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Paciente</th>
+                                <th>Médico</th>
+                                <th>Especialidade</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Carregando consultas...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mt-20">
+                <div class="card-header">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Alertas e Notificações</h3>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-spinner fa-spin"></i> Carregando alertas...
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Clínica Saúde+ - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script src="../js/admin-dashboard.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Administração - Clínica Saúde+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <h1>Clínica Saúde+</h1>
+                <p>Área Administrativa</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <div class="card-header">
+                    <h3>Login de Administração</h3>
+                </div>
+
+                <form id="loginAdminForm">
+                    <div class="form-group">
+                        <label for="usuario">Usuário</label>
+                        <input type="text" id="usuario" name="usuario" required placeholder="Digite seu usuário">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <input type="password" id="senha" name="senha" required placeholder="Digite sua senha">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-tertiary">Entrar</button>
+                    </div>
+
+                    <div class="text-center mt-20">
+                        <p><a href="../index.html" style="color: var(--text-light);">← Voltar</a></p>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Clínica Saúde+ - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script src="../js/config.js"></script>`n    <script src="../js/api.js"></script>
+    <script src="../js/admin-login.js"></script>
+</body>
+</html>
+

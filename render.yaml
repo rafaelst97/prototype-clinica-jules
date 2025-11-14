@@ -1,0 +1,48 @@
+# Render Deploy Configuration
+# https://render.com/docs/blueprint-spec
+
+services:
+  # Backend API (FastAPI)
+  - type: web
+    name: clinica-saude-backend
+    runtime: python
+    plan: free
+    region: oregon
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: clinica-saude-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+      - key: FRONTEND_URL
+        value: https://clinica-saude-frontend.onrender.com
+
+  # Frontend (Static Site)
+  - type: web
+    name: clinica-saude-frontend
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: clinica-saude-backend
+          type: web
+          property: host
+
+databases:
+  - name: clinica-saude-db
+    databaseName: clinica_db
+    user: clinica_user
+    plan: free
+    region: oregon

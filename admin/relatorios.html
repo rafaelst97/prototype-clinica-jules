@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Clínica Saúde+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/auth-guard.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">Clínica Saúde+ | Administração</div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Início</a></li>
+                <li><a href="medicos.html">Médicos</a></li>
+                <li><a href="pacientes.html">Pacientes</a></li>
+                <li><a href="relatorios.html">Relatórios</a></li>
+                <li><a href="convenios.html">Convênios</a></li>
+            </ul>
+            <div class="nav-user">
+                <span><strong>Administrador</strong></span>
+                <a href="../index.html" class="btn btn-outline" style="padding: 5px 15px;">Sair</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">Relatórios Gerenciais</h2>
+
+            <div class="grid-2">
+                <!-- Relatório de Consultas por Médico -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Consultas por Médico</h3>
+                    </div>
+                    <form id="relatorioMedicoForm">
+                        <div class="form-group">
+                            <label for="medico">Médico</label>
+                            <select id="medico" name="medico">
+                                <option value="">Todos os médicos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="periodoInicio">Período Inicial</label>
+                            <input type="date" id="periodoInicio" name="periodoInicio">
+                        </div>
+                        <div class="form-group">
+                            <label for="periodoFim">Período Final</label>
+                            <input type="date" id="periodoFim" name="periodoFim">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
+                    </form>
+                </div>
+
+                <!-- Relatório de Consultas por Especialidade -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-hospital"></i> Consultas por Especialidade</h3>
+                    </div>
+                    <form id="relatorioEspecialidadeForm">
+                        <div class="form-group">
+                            <label for="especialidade">Especialidade</label>
+                            <select id="especialidade" name="especialidade">
+                                <option value="">Todas as especialidades</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="periodoInicio2">Período Inicial</label>
+                            <input type="date" id="periodoInicio2" name="periodoInicio2">
+                        </div>
+                        <div class="form-group">
+                            <label for="periodoFim2">Período Final</label>
+                            <input type="date" id="periodoFim2" name="periodoFim2">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
+                    </form>
+                </div>
+
+                <!-- Relatório de Cancelamentos -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-times-circle"></i> Taxa de Cancelamentos</h3>
+                    </div>
+                    <form id="relatorioCancelamentoForm">
+                        <div class="form-group">
+                            <label for="periodoInicio3">Período Inicial</label>
+                            <input type="date" id="periodoInicio3" name="periodoInicio3">
+                        </div>
+                        <div class="form-group">
+                            <label for="periodoFim3">Período Final</label>
+                            <input type="date" id="periodoFim3" name="periodoFim3">
+                        </div>
+                        <div class="form-group">
+                            <label for="motivoCancelamento">Filtrar por Motivo</label>
+                            <select id="motivoCancelamento" name="motivoCancelamento">
+                                <option value="">Todos os motivos</option>
+                                <option value="paciente">Cancelado pelo paciente</option>
+                                <option value="medico">Cancelado pelo médico</option>
+                                <option value="falta">Falta sem aviso</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
+                    </form>
+                </div>
+
+                <!-- Relatório de Pacientes Frequentes -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Pacientes Mais Frequentes</h3>
+                    </div>
+                    <form id="relatorioPacienteForm">
+                        <div class="form-group">
+                            <label for="periodoInicio4">Período Inicial</label>
+                            <input type="date" id="periodoInicio4" name="periodoInicio4">
+                        </div>
+                        <div class="form-group">
+                            <label for="periodoFim4">Período Final</label>
+                            <input type="date" id="periodoFim4" name="periodoFim4">
+                        </div>
+                        <div class="form-group">
+                            <label for="quantidade">Quantidade de Pacientes</label>
+                            <select id="quantidade" name="quantidade">
+                                <option value="10">Top 10</option>
+                                <option value="20">Top 20</option>
+                                <option value="50">Top 50</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-20">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-line"></i> Visão Geral do Período Atual</h3>
+                </div>
+                <div id="estatisticasGerais" class="grid-2">
+                    <div style="text-align: center; padding: 20px; color: #999;">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 10px;">Carregando estatísticas...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Clínica Saúde+ - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script src="../js/config.js"></script>`n    <script src="../js/api.js"></script>
+    <script src="../js/admin-relatorios.js"></script>
+</body>
+</html>
+

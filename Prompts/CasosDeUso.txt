@@ -1,0 +1,23 @@
+Sistema: Sistema de Agendamento de Consultas
+
+Ator: Paciente
+  - Cadastrar Paciente
+  - Login do Paciente
+  - Agendar Consulta
+  - Visualizar Consultas
+  - Cancelar Consulta
+  - Reagendar Consulta
+
+Ator: Médico
+  - Gerenciar Horários de Trabalho
+  - Visualizar Consultas Agendadas
+  - Registrar Observações da Consulta
+  - Bloquear Horários
+  - Visualizar Observações da Consulta
+
+Ator: Administrador
+  - Gerar Relatórios em PDF
+  - Gerenciar Cadastro de Médicos
+  - Gerenciar Planos de Saúde
+  - Desbloquear Contas de Pacientes
+  - Visualizar Observações da Consulta

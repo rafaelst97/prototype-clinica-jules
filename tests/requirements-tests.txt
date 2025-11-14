@@ -1,0 +1,17 @@
+# Requirements para Testes Automatizados
+# Instalar com: pip install -r tests/requirements-tests.txt
+
+# Selenium para testes de interface
+selenium==4.15.2
+
+# Pytest para framework de testes
+pytest==7.4.3
+pytest-html==4.1.1
+pytest-xdist==3.5.0
+
+# WebDriver Manager (opcional, para gerenciar drivers automaticamente)
+webdriver-manager==4.0.1
+
+# Utilitários
+python-dotenv==1.0.0
+requests==2.31.0
