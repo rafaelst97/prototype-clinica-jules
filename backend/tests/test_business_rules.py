@@ -1,286 +1,130 @@
 """
-Testes de Regras de Negócio (RN1, RN2, RN3, RN4)
-Performance: ~3-4 segundos total
+Testes de Regras de Negócio, alinhados com a documentação do projeto.
 """
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from fastapi import status
-
+from app.models.models import Consulta, Paciente
 
 @pytest.mark.business_rules
 class TestBusinessRules:
-    """Suite de testes de regras de negócio"""
-    
-    # ========== RN1: Bloqueio por Faltas ==========
-    
-    def test_rn1_paciente_bloqueado_nao_pode_agendar(
-        self, client, db_session, paciente_teste, medico_cardiologista, 
-        horarios_trabalho_cardio, auth_headers_paciente
-    ):
-        """RN1: Paciente bloqueado não pode agendar consultas"""
-        # Bloquear paciente
-        paciente_teste.esta_bloqueado = True
-        db_session.commit()
-        
-        # Tentar agendar
-        data_futura = datetime.now() + timedelta(days=5)
-        response = client.post(
-            "/consultas/agendar",
+    """Conjunto de testes para as regras de negócio do sistema."""
+
+    # RN1: Cancelamento/Reagendamento com 24h de antecedência
+    def test_rn1_permite_cancelamento_com_antecedencia(self, client, db_session, consulta_agendada, auth_headers_paciente):
+        """Verifica se o cancelamento é permitido com mais de 24h de antecedência."""
+        # A consulta_agendada é criada com 48h de antecedência por padrão
+        response = client.delete(
+            f"/pacientes/consultas/{consulta_agendada.id_consulta}",
             headers=auth_headers_paciente,
-            json={
-                "id_medico": medico_cardiologista.id_medico,
-                "data_hora": data_futura.strftime("%Y-%m-%dT10:00:00"),
-                "tipo": "Consulta"
-            }
+            json={"paciente_id": consulta_agendada.id_paciente_fk}
         )
-        
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-        assert "bloqueado" in response.json()["detail"].lower()
-    
-    def test_rn1_paciente_desbloqueado_pode_agendar(
-        self, client, db_session, paciente_teste, medico_cardiologista,
-        horarios_trabalho_cardio, auth_headers_paciente
-    ):
-        """RN1: Paciente desbloqueado pode agendar normalmente"""
-        # Garantir que está desbloqueado
-        paciente_teste.esta_bloqueado = False
-        db_session.commit()
-        
-        # Agendar consulta
-        data_futura = datetime.now() + timedelta(days=5)
-        response = client.post(
-            "/consultas/agendar",
-            headers=auth_headers_paciente,
-            json={
-                "id_medico": medico_cardiologista.id_medico,
-                "data_hora": data_futura.strftime("%Y-%m-%dT10:00:00"),
-                "tipo": "Consulta"
-            }
-        )
-        
-        assert response.status_code == status.HTTP_201_CREATED
-    
-    # ========== RN2: Horário de Trabalho ==========
-    
-    def test_rn2_agendamento_fora_horario_trabalho(
-        self, client, medico_cardiologista, horarios_trabalho_cardio,
-        auth_headers_paciente
-    ):
-        """RN2: Não permite agendar fora do horário de trabalho"""
-        # Tentar agendar às 20h (fora do horário 9h-17h)
-        data_futura = datetime.now() + timedelta(days=5)
-        data_futura = data_futura.replace(hour=20, minute=0)
-        
-        response = client.post(
-            "/consultas/agendar",
-            headers=auth_headers_paciente,
-            json={
-                "id_medico": medico_cardiologista.id_medico,
-                "data_hora": data_futura.strftime("%Y-%m-%dT20:00:00"),
-                "tipo": "Consulta"
-            }
-        )
-        
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert "horário" in response.json()["detail"].lower()
-    
-    def test_rn2_agendamento_dentro_horario_trabalho(
-        self, client, medico_cardiologista, horarios_trabalho_cardio,
-        auth_headers_paciente
-    ):
-        """RN2: Permite agendar dentro do horário de trabalho"""
-        # Agendar às 14h (dentro do horário 9h-17h)
-        data_futura = datetime.now() + timedelta(days=5)
-        data_futura = data_futura.replace(hour=14, minute=0)
-        
-        response = client.post(
-            "/consultas/agendar",
-            headers=auth_headers_paciente,
-            json={
-                "id_medico": medico_cardiologista.id_medico,
-                "data_hora": data_futura.strftime("%Y-%m-%dT14:00:00"),
-                "tipo": "Consulta"
-            }
-        )
-        
-        assert response.status_code == status.HTTP_201_CREATED
-    
-    def test_rn2_agendamento_dia_sem_trabalho(
-        self, client, medico_cardiologista, horarios_trabalho_cardio,
-        auth_headers_paciente
-    ):
-        """RN2: Não permite agendar em dia que médico não trabalha"""
-        # Encontrar um sábado (médico trabalha Seg-Sex)
-        data_futura = datetime.now() + timedelta(days=1)
-        while data_futura.weekday() != 5:  # 5 = Sábado
-            data_futura += timedelta(days=1)
-        
-        data_futura = data_futura.replace(hour=10, minute=0)
-        
-        response = client.post(
-            "/consultas/agendar",
-            headers=auth_headers_paciente,
-            json={
-                "id_medico": medico_cardiologista.id_medico,
-                "data_hora": data_futura.strftime("%Y-%m-%dT10:00:00"),
-                "tipo": "Consulta"
-            }
-        )
-        
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-    
-    # ========== RN3: Conflito de Horários ==========
-    
-    def test_rn3_agendamento_horario_ocupado(
-        self, client, db_session, medico_cardiologista, paciente_teste,
-        horarios_trabalho_cardio, auth_headers_paciente
-    ):
-        """RN3: Não permite agendar em horário já ocupado"""
-        from app.models.models import Consulta
-        
-        # Criar consulta existente
-        data_hora = datetime.now() + timedelta(days=5)
-        data_hora = data_hora.replace(hour=10, minute=0, second=0, microsecond=0)
-        
-        consulta_existente = Consulta(
-            id_paciente_fk=paciente_teste.id_paciente,
-            id_medico_fk=medico_cardiologista.id_medico,
-            data_hora=data_hora,
-            tipo="Consulta",
-            status="Agendada"
-        )
-        db_session.add(consulta_existente)
-        db_session.commit()
-        
-        # Tentar agendar no mesmo horário
-        response = client.post(
-            "/consultas/agendar",
-            headers=auth_headers_paciente,
-            json={
-                "id_medico": medico_cardiologista.id_medico,
-                "data_hora": data_hora.strftime("%Y-%m-%dT10:00:00"),
-                "tipo": "Consulta"
-            }
-        )
-        
-        assert response.status_code == status.HTTP_409_CONFLICT
-        assert "ocupado" in response.json()["detail"].lower()
-    
-    def test_rn3_agendamento_horario_livre(
-        self, client, medico_cardiologista, horarios_trabalho_cardio,
-        auth_headers_paciente
-    ):
-        """RN3: Permite agendar em horário livre"""
-        data_futura = datetime.now() + timedelta(days=7)
-        # Garantir que seja uma segunda-feira (dia 0)
-        while data_futura.weekday() != 0:
-            data_futura += timedelta(days=1)
-        data_futura = data_futura.replace(hour=11, minute=0)
-        
-        response = client.post(
-            "/consultas/agendar",
-            headers=auth_headers_paciente,
-            json={
-                "id_medico": medico_cardiologista.id_medico,
-                "data_hora": data_futura.strftime("%Y-%m-%dT11:00:00"),
-                "tipo": "Consulta"
-            }
-        )
-        
-        assert response.status_code == status.HTTP_201_CREATED
-    
-    # ========== RN4: Antecedência Mínima ==========
-    
-    def test_rn4_cancelamento_com_antecedencia(
-        self, client, db_session, medico_cardiologista, paciente_teste,
-        auth_headers_paciente
-    ):
-        """RN4: Permite cancelar com antecedência >= 24h"""
-        from app.models.models import Consulta
-        
-        # Criar consulta para daqui a 48 horas
-        data_hora = datetime.now() + timedelta(hours=48)
-        
-        consulta = Consulta(
-            id_paciente_fk=paciente_teste.id_paciente,
-            id_medico_fk=medico_cardiologista.id_medico,
-            data_hora=data_hora,
-            tipo="Consulta",
-            status="Agendada"
-        )
-        db_session.add(consulta)
-        db_session.commit()
-        db_session.refresh(consulta)
-        
-        # Cancelar
-        response = client.put(
-            f"/consultas/{consulta.id_consulta}/cancelar",
-            headers=auth_headers_paciente
-        )
-        
         assert response.status_code == status.HTTP_200_OK
-        assert response.json()["status"] == "Cancelada"
-    
-    def test_rn4_cancelamento_sem_antecedencia(
-        self, client, db_session, medico_cardiologista, paciente_teste,
-        auth_headers_paciente
-    ):
-        """RN4: Não permite cancelar com antecedência < 24h"""
-        from app.models.models import Consulta
-        
-        # Criar consulta para daqui a 12 horas
-        data_hora = datetime.now() + timedelta(hours=12)
-        
-        consulta = Consulta(
-            id_paciente_fk=paciente_teste.id_paciente,
-            id_medico_fk=medico_cardiologista.id_medico,
-            data_hora=data_hora,
-            tipo="Consulta",
-            status="Agendada"
-        )
-        db_session.add(consulta)
-        db_session.commit()
-        db_session.refresh(consulta)
-        
-        # Tentar cancelar
-        response = client.put(
-            f"/consultas/{consulta.id_consulta}/cancelar",
-            headers=auth_headers_paciente
-        )
-        
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert "24 horas" in response.json()["detail"].lower()
-    
-    def test_rn4_reagendamento_com_antecedencia(
-        self, client, db_session, medico_cardiologista, paciente_teste,
-        horarios_trabalho_cardio, auth_headers_paciente
-    ):
-        """RN4: Permite reagendar com antecedência >= 24h"""
-        from app.models.models import Consulta
-        
-        # Criar consulta para daqui a 72 horas
-        data_hora_original = datetime.now() + timedelta(hours=72)
-        data_hora_original = data_hora_original.replace(hour=10, minute=0)
-        
-        consulta = Consulta(
-            id_paciente_fk=paciente_teste.id_paciente,
-            id_medico_fk=medico_cardiologista.id_medico,
-            data_hora=data_hora_original,
-            tipo="Consulta",
-            status="Agendada"
-        )
-        db_session.add(consulta)
-        db_session.commit()
-        db_session.refresh(consulta)
-        
-        # Reagendar para daqui a 96 horas
-        nova_data = datetime.now() + timedelta(hours=96)
-        nova_data = nova_data.replace(hour=14, minute=0)
-        
-        response = client.put(
-            f"/consultas/{consulta.id_consulta}/reagendar",
+        assert "cancelada com sucesso" in response.json()["mensagem"]
+
+    def test_rn1_bloqueia_cancelamento_sem_antecedencia(self, client, db_session, consulta_proxima, auth_headers_paciente):
+        """Verifica se o cancelamento é bloqueado com menos de 24h de antecedência."""
+        # a consulta_proxima é criada com 12h de antecedência
+        response = client.delete(
+            f"/pacientes/consultas/{consulta_proxima.id_consulta}",
             headers=auth_headers_paciente,
-            json={"nova_data_hora": nova_data.strftime("%Y-%m-%dT14:00:00")}
+            json={"paciente_id": consulta_proxima.id_paciente_fk}
         )
-        
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "24 horas de antecedência" in response.json()["detail"]
+
+    def test_rn1_permite_reagendamento_com_antecedencia(self, client, db_session, consulta_agendada, auth_headers_paciente):
+        """Verifica se o reagendamento é permitido com mais de 24h de antecedência."""
+        nova_data_hora = (datetime.now() + timedelta(days=4)).strftime("%Y-%m-%dT10:00:00")
+        response = client.put(
+            f"/pacientes/consultas/{consulta_agendada.id_consulta}/reagendar",
+            headers=auth_headers_paciente,
+            json={"nova_data_hora_inicio": nova_data_hora, "paciente_id": consulta_agendada.id_paciente_fk}
+        )
         assert response.status_code == status.HTTP_200_OK
+        assert response.json()["data_hora_inicio"] == nova_data_hora
+
+    def test_rn1_bloqueia_reagendamento_sem_antecedencia(self, client, db_session, consulta_proxima, auth_headers_paciente):
+        """Verifica se o reagendamento é bloqueado com menos de 24h de antecedência."""
+        nova_data_hora = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%dT10:00:00")
+        response = client.put(
+            f"/pacientes/consultas/{consulta_proxima.id_consulta}/reagendar",
+            headers=auth_headers_paciente,
+            json={"nova_data_hora_inicio": nova_data_hora, "paciente_id": consulta_proxima.id_paciente_fk}
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "24 horas de antecedência" in response.json()["detail"]
+
+    # RN2: Máximo de 2 consultas futuras por paciente
+    def test_rn2_permite_agendar_ate_duas_consultas(self, client, db_session, paciente_teste, medico_cardiologista, auth_headers_paciente):
+        """Verifica se o paciente pode agendar até duas consultas futuras."""
+        # Agendamento da primeira consulta
+        data_1 = (datetime.now() + timedelta(days=10)).strftime("%Y-%m-%dT10:00:00")
+        response_1 = client.post(
+            f"/pacientes/consultas?paciente_id={paciente_teste.id_paciente}",
+            headers=auth_headers_paciente,
+            json={"id_medico": medico_cardiologista.id_medico, "data_hora_inicio": data_1}
+        )
+        assert response_1.status_code == status.HTTP_201_CREATED
+
+        # Agendamento da segunda consulta
+        data_2 = (datetime.now() + timedelta(days=12)).strftime("%Y-%m-%dT11:00:00")
+        response_2 = client.post(
+            f"/pacientes/consultas?paciente_id={paciente_teste.id_paciente}",
+            headers=auth_headers_paciente,
+            json={"id_medico": medico_cardiologista.id_medico, "data_hora_inicio": data_2}
+        )
+        assert response_2.status_code == status.HTTP_201_CREATED
+
+    def test_rn2_bloqueia_terceira_consulta_futura(self, client, db_session, paciente_com_duas_consultas, medico_cardiologista, auth_headers_paciente):
+        """Verifica se o sistema bloqueia o agendamento da terceira consulta futura."""
+        paciente_id = paciente_com_duas_consultas
+        
+        # Tentar agendar a terceira consulta
+        data_3 = (datetime.now() + timedelta(days=15)).strftime("%Y-%m-%dT10:00:00")
+        response = client.post(
+            f"/pacientes/consultas?paciente_id={paciente_id}",
+            headers=auth_headers_paciente,
+            json={"id_medico": medico_cardiologista.id_medico, "data_hora_inicio": data_3}
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "limite de 2 consultas futuras" in response.json()["detail"]
+
+    # RN3: Bloqueio de paciente por 3 faltas
+    def test_rn3_paciente_bloqueado_nao_agenda(self, client, db_session, paciente_bloqueado, medico_cardiologista, auth_headers_paciente_bloqueado):
+        """Verifica se um paciente bloqueado por faltas não consegue agendar."""
+        data = (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%dT10:00:00")
+        response = client.post(
+            f"/pacientes/consultas?paciente_id={paciente_bloqueado.id_paciente}",
+            headers=auth_headers_paciente_bloqueado,
+            json={"id_medico": medico_cardiologista.id_medico, "data_hora_inicio": data}
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "paciente está bloqueado" in response.json()["detail"]
+
+    # RN4: Evitar conflitos de agendamento para médicos
+    def test_rn4_nao_permite_agendamento_em_horario_ocupado(self, client, db_session, consulta_agendada, auth_headers_paciente):
+        """Verifica se o sistema previne agendamentos conflitantes para o mesmo médico."""
+        # Tenta agendar no mesmo horário da `consulta_agendada`
+        response = client.post(
+            f"/pacientes/consultas?paciente_id={consulta_agendada.id_paciente_fk}",
+            headers=auth_headers_paciente,
+            json={
+                "id_medico": consulta_agendada.id_medico_fk,
+                "data_hora_inicio": consulta_agendada.data_hora_inicio.isoformat()
+            }
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "conflito de horário" in response.json()["detail"]
+        
+    # Extra: Validar agendamento fora do horário de trabalho do médico
+    def test_agendamento_fora_horario_trabalho_medico(self, client, paciente_teste, medico_sem_horario, auth_headers_paciente):
+        """Verifica se o sistema bloqueia agendamento fora do horário de trabalho do médico."""
+        data = (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%dT15:00:00")
+        response = client.post(
+            f"/pacientes/consultas?paciente_id={paciente_teste.id_paciente}",
+            headers=auth_headers_paciente,
+            json={"id_medico": medico_sem_horario.id_medico, "data_hora_inicio": data}
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "fora do horário de trabalho" in response.json()["detail"]

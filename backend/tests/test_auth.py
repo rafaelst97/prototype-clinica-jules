@@ -5,7 +5,6 @@ import pytest
 from datetime import timedelta
 from jose import jwt
 from app.config import settings
-from app.models import TipoUsuario
 from app.utils.auth import verify_password, get_password_hash
 
 
@@ -83,8 +82,8 @@ def test_login_usuario_bloqueado(client, usuario_paciente, db):
     assert "bloqueado" in response.json()["detail"].lower()
 
 
-def test_token_contem_tipo_usuario(client, usuario_paciente):
-    """Testa que token JWT contém tipo de usuário"""
+def test_token_contem_tipo_e_id_usuario(client, usuario_paciente):
+    """Testa que token JWT contém user_type e user_id"""
     dados = {
         "email": usuario_paciente.email,
         "senha": "senha123"
@@ -94,8 +93,10 @@ def test_token_contem_tipo_usuario(client, usuario_paciente):
     token = response.json()["access_token"]
     
     payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-    assert "tipo" in payload
-    assert payload["tipo"] == TipoUsuario.PACIENTE.value
+    assert "user_type" in payload
+    assert payload["user_type"] == "paciente"
+    assert "user_id" in payload
+    assert payload["user_id"] == usuario_paciente.id_paciente
 
 
 def test_acesso_endpoint_sem_token(client):
@@ -119,7 +120,7 @@ def test_acesso_endpoint_token_expirado(client, usuario_paciente):
     
     # Criar token com tempo de expiração negativo
     token = create_access_token(
-        data={"sub": usuario_paciente.email, "tipo": usuario_paciente.tipo.value},
+        data={"sub": usuario_paciente.email, "user_type": "paciente"},
         expires_delta=timedelta(minutes=-30)
     )
     

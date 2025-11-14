@@ -1,120 +1,80 @@
 """
-Testes de Endpoints Admin
-Performance: ~2-3 segundos total
+Testes para os Endpoints de Administração
 """
 import pytest
 from fastapi import status
 
-
 @pytest.mark.integration
 class TestAdminEndpoints:
-    """Suite de testes dos endpoints de administração"""
-    
-    def test_listar_pacientes(self, client, auth_headers_admin, paciente_teste):
-        """Teste: Listar todos os pacientes"""
+    """Conjunto de testes para os endpoints administrativos."""
+
+    def test_listar_pacientes_sucesso(self, client, auth_headers_admin, paciente_teste):
+        """Verifica se a listagem de pacientes funciona e retorna dados corretos."""
         response = client.get("/admin/pacientes", headers=auth_headers_admin)
-        
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         assert isinstance(data, list)
-        assert len(data) >= 1
-        assert data[0]["nome"] == "Carlos Teste"
-    
-    def test_buscar_paciente_por_id(self, client, auth_headers_admin, paciente_teste):
-        """Teste: Buscar paciente por ID"""
-        response = client.get(
-            f"/admin/pacientes/{paciente_teste.id_paciente}",
-            headers=auth_headers_admin
-        )
-        
+        assert any(p["id_paciente"] == paciente_teste.id_paciente for p in data)
+
+    def test_buscar_paciente_por_id_sucesso(self, client, auth_headers_admin, paciente_teste):
+        """Verifica a busca de um paciente específico por ID."""
+        response = client.get(f"/admin/pacientes/{paciente_teste.id_paciente}", headers=auth_headers_admin)
         assert response.status_code == status.HTTP_200_OK
-        data = response.json()
-        assert data["id_paciente"] == paciente_teste.id_paciente
-        assert data["nome"] == "Carlos Teste"
-    
-    def test_bloquear_paciente(self, client, auth_headers_admin, paciente_teste):
-        """Teste: Bloquear paciente"""
-        response = client.post(
-            f"/admin/pacientes/{paciente_teste.id_paciente}/bloquear",
-            headers=auth_headers_admin
-        )
-        
+        assert response.json()["id_paciente"] == paciente_teste.id_paciente
+
+    def test_desbloquear_paciente_sucesso(self, client, auth_headers_admin, paciente_bloqueado):
+        """Verifica se é possível desbloquear um paciente."""
+        response = client.post(f"/admin/pacientes/{paciente_bloqueado.id_paciente}/desbloquear", headers=auth_headers_admin)
         assert response.status_code == status.HTTP_200_OK
-        data = response.json()
-        assert data["esta_bloqueado"] is True
-    
-    def test_desbloquear_paciente(self, client, auth_headers_admin, db_session, paciente_teste):
-        """Teste: Desbloquear paciente"""
-        # Bloquear primeiro
-        paciente_teste.esta_bloqueado = True
-        db_session.commit()
-        
-        # Desbloquear
-        response = client.post(
-            f"/admin/pacientes/{paciente_teste.id_paciente}/desbloquear",
-            headers=auth_headers_admin
-        )
-        
-        assert response.status_code == status.HTTP_200_OK
-        data = response.json()
-        assert data["esta_bloqueado"] is False
-    
-    def test_listar_medicos(self, client, auth_headers_admin, medico_cardiologista):
-        """Teste: Listar todos os médicos"""
+        assert response.json()["esta_bloqueado"] is False
+
+    def test_listar_medicos_sucesso(self, client, auth_headers_admin, medico_cardiologista):
+        """Verifica a listagem de médicos."""
         response = client.get("/admin/medicos", headers=auth_headers_admin)
-        
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         assert isinstance(data, list)
-        assert len(data) >= 1
-    
-    def test_buscar_medico_por_id(self, client, auth_headers_admin, medico_cardiologista):
-        """Teste: Buscar médico por ID"""
-        response = client.get(
-            f"/admin/medicos/{medico_cardiologista.id_medico}",
-            headers=auth_headers_admin
-        )
-        
+        assert any(m["id_medico"] == medico_cardiologista.id_medico for m in data)
+
+    def test_criar_medico_sucesso(self, client, auth_headers_admin, especialidade_ortopedia):
+        """Verifica a criação de um novo médico."""
+        novo_medico = {
+            "nome": "Dra. Teste", "crm": "CRM-99999", "email": "dra.teste@saude.com",
+            "senha": "senha123", "id_especialidade_fk": especialidade_ortopedia.id_especialidade,
+            "cpf": "12345678901"
+        }
+        response = client.post("/admin/medicos", headers=auth_headers_admin, json=novo_medico)
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.json()["crm"] == "CRM-99999"
+
+    def test_atualizar_medico_sucesso(self, client, auth_headers_admin, medico_cardiologista):
+        """Verifica a atualização dos dados de um médico."""
+        update_data = {"nome": "Dr. João Silva Atualizado", "crm": "CRM-12345-NEW"}
+        response = client.put(f"/admin/medicos/{medico_cardiologista.id_medico}", headers=auth_headers_admin, json=update_data)
         assert response.status_code == status.HTTP_200_OK
-        data = response.json()
-        assert data["id_medico"] == medico_cardiologista.id_medico
-        assert data["crm"] == "CRM-12345"
-    
-    def test_listar_consultas(self, client, auth_headers_admin):
-        """Teste: Listar todas as consultas"""
-        response = client.get("/admin/consultas", headers=auth_headers_admin)
-        
+        assert response.json()["nome"] == "Dr. João Silva Atualizado"
+
+    def test_excluir_medico_sucesso(self, client, auth_headers_admin, medico_ortopedista):
+        """Verifica a exclusão de um médico."""
+        response = client.delete(f"/admin/medicos/{medico_ortopedista.id_medico}", headers=auth_headers_admin)
+        assert response.status_code == status.HTTP_200_OK
+        assert "removido com sucesso" in response.json()["mensagem"]
+
+    def test_listar_planos_saude_sucesso(self, client, auth_headers_admin, plano_unimed):
+        """Verifica a listagem de planos de saúde."""
+        response = client.get("/admin/planos-saude", headers=auth_headers_admin)
         assert response.status_code == status.HTTP_200_OK
         assert isinstance(response.json(), list)
-    
-    def test_listar_especialidades(self, client, auth_headers_admin, especialidade_cardiologia):
-        """Teste: Listar especialidades"""
-        response = client.get("/admin/especialidades", headers=auth_headers_admin)
-        
+        assert any(p["nome"] == "Unimed" for p in response.json())
+
+    def test_gerar_relatorio_sucesso(self, client, auth_headers_admin):
+        """Verifica a geração de um relatório."""
+        response = client.get("/admin/relatorios/consultas-por-medico", headers=auth_headers_admin)
         assert response.status_code == status.HTTP_200_OK
-        data = response.json()
-        assert len(data) >= 1
-        assert any(e["nome"] == "Cardiologia" for e in data)
-    
-    def test_criar_especialidade(self, client, auth_headers_admin):
-        """Teste: Criar nova especialidade"""
-        response = client.post(
-            "/admin/especialidades",
-            headers=auth_headers_admin,
-            json={"nome": "Neurologia"}
-        )
-        
-        assert response.status_code == status.HTTP_201_CREATED
-        data = response.json()
-        assert data["nome"] == "Neurologia"
-    
-    def test_admin_nao_autenticado(self, client):
-        """Teste: Acesso negado sem autenticação"""
-        response = client.get("/admin/pacientes")
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    
-    def test_admin_token_invalido(self, client):
-        """Teste: Token inválido"""
-        headers = {"Authorization": "Bearer token_invalido"}
-        response = client.get("/admin/pacientes", headers=headers)
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        # A resposta deve ser um PDF
+        assert response.headers['content-type'] == 'application/pdf'
+
+    def test_acesso_negado_para_nao_admin(self, client, auth_headers_paciente):
+        """Garante que usuários não-admin não acessem endpoints de admin."""
+        response = client.get("/admin/pacientes", headers=auth_headers_paciente)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
