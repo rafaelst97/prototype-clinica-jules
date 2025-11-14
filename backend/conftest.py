@@ -3,7 +3,7 @@ Configuração global de testes - Pytest Fixtures
 Otimizado para máxima performance com caching e paralelização
 """
 import pytest
-from fastapi.testclient import TestClient
+from fastapi.testclient import TestClient as FastAPIClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -53,6 +53,8 @@ def db_session(db_engine):
     connection.close()
 
 
+import fastapi.testclient
+
 @pytest.fixture(scope="function")
 def client(db_session):
     """Cliente de testes com banco de dados mockado"""
@@ -63,7 +65,7 @@ def client(db_session):
             pass
     
     app.dependency_overrides[get_db] = override_get_db
-    with TestClient(app) as test_client:
+    with fastapi.testclient.TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
 
@@ -271,3 +273,126 @@ def auth_headers_medico(token_medico):
 def auth_headers_paciente(token_paciente):
     """Headers com autenticação de paciente"""
     return {"Authorization": f"Bearer {token_paciente}"}
+
+
+@pytest.fixture(scope="function")
+def consulta_agendada(db_session, paciente_teste, medico_cardiologista):
+    """Cria uma consulta agendada para daqui a 48 horas."""
+    data_hora = datetime.now() + timedelta(hours=48)
+    consulta = Consulta(
+        id_paciente_fk=paciente_teste.id_paciente,
+        id_medico_fk=medico_cardiologista.id_medico,
+        data_hora_inicio=data_hora,
+        data_hora_fim=data_hora + timedelta(minutes=30),
+        status="agendada"
+    )
+    db_session.add(consulta)
+    db_session.commit()
+    db_session.refresh(consulta)
+    return consulta
+
+
+@pytest.fixture(scope="function")
+def consulta_proxima(db_session, paciente_teste, medico_cardiologista):
+    """Cria uma consulta agendada para daqui a 12 horas."""
+    data_hora = datetime.now() + timedelta(hours=12)
+    consulta = Consulta(
+        id_paciente_fk=paciente_teste.id_paciente,
+        id_medico_fk=medico_cardiologista.id_medico,
+        data_hora_inicio=data_hora,
+        data_hora_fim=data_hora + timedelta(minutes=30),
+        status="agendada"
+    )
+    db_session.add(consulta)
+    db_session.commit()
+    db_session.refresh(consulta)
+    return consulta
+
+
+@pytest.fixture(scope="function")
+def paciente_com_duas_consultas(db_session, paciente_teste, medico_cardiologista):
+    """Cria um paciente com duas consultas futuras já agendadas."""
+    # Consulta 1
+    data_1 = datetime.now() + timedelta(days=5)
+    c1 = Consulta(
+        id_paciente_fk=paciente_teste.id_paciente,
+        id_medico_fk=medico_cardiologista.id_medico,
+        data_hora_inicio=data_1,
+        data_hora_fim=data_1 + timedelta(minutes=30),
+        status="agendada"
+    )
+    # Consulta 2
+    data_2 = datetime.now() + timedelta(days=8)
+    c2 = Consulta(
+        id_paciente_fk=paciente_teste.id_paciente,
+        id_medico_fk=medico_cardiologista.id_medico,
+        data_hora_inicio=data_2,
+        data_hora_fim=data_2 + timedelta(minutes=30),
+        status="agendada"
+    )
+    db_session.add_all([c1, c2])
+    db_session.commit()
+    return paciente_teste.id_paciente
+
+
+@pytest.fixture(scope="function")
+def paciente_bloqueado(db_session):
+    """Cria um paciente que está bloqueado."""
+    paciente = Paciente(
+        nome="Paciente Bloqueado",
+        cpf="12312312300",
+        email="bloqueado@test.com",
+        senha_hash=pwd_context.hash("senha123"),
+        data_nascimento=date(1995, 1, 1),
+        esta_bloqueado=True
+    )
+    db_session.add(paciente)
+    db_session.commit()
+    db_session.refresh(paciente)
+    return paciente
+
+@pytest.fixture(scope="function")
+def medico_sem_horario(db_session, especialidade_ortopedia):
+    """Cria um médico sem horário de trabalho configurado."""
+    medico = Medico(
+        nome="Dr. Sem Horário",
+        cpf="98765432100",
+        email="semhorario@test.com",
+        senha_hash=pwd_context.hash("medico123"),
+        crm="CRM-00000",
+        id_especialidade_fk=especialidade_ortopedia.id_especialidade
+    )
+    db_session.add(medico)
+    db_session.commit()
+    db_session.refresh(medico)
+    return medico
+
+@pytest.fixture(scope="function")
+def token_paciente_bloqueado(client, paciente_bloqueado):
+    """Gera um token para o paciente bloqueado."""
+    # Nota: O login pode falhar se a lógica de bloqueio estiver no endpoint de login.
+    # A abordagem aqui é gerar o token diretamente para testar endpoints de agendamento.
+    from app.utils.auth import create_access_token
+    token = create_access_token(data={"sub": paciente_bloqueado.email, "user_type": "paciente", "user_id": paciente_bloqueado.id_paciente})
+    return token
+
+@pytest.fixture(scope="function")
+def auth_headers_paciente_bloqueado(token_paciente_bloqueado):
+    """Headers de autenticação para o paciente bloqueado."""
+    return {"Authorization": f"Bearer {token_paciente_bloqueado}"}
+
+
+@pytest.fixture(scope="function")
+def token_medico_ortopedista(client, medico_ortopedista):
+    """Token JWT do médico ortopedista"""
+    response = client.post(
+        "/auth/login",
+        json={"email": "maria@test.com", "senha": "medico123"}
+    )
+    return response.json()["access_token"]
+
+
+@pytest.fixture(scope="function")
+def auth_headers_medico_ortopedista(token_medico_ortopedista):
+    """Headers com autenticação de médico ortopedista"""
+    return {"Authorization": f"Bearer {token_medico_ortopedista}"}

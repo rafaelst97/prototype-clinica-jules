@@ -87,10 +87,10 @@ function renderizarProximasConsultas(consultas) {
         const dataHora = consulta.data_hora_inicio || consulta.data_hora;
         return `
             <tr>
-                <td>${formatDateTime(dataHora)}</td>
-                <td>${consulta.medico?.especialidade?.nome || 'N/A'}</td>
-                <td>${consulta.medico?.nome || 'N/A'}</td>
-                <td>
+                <td data-label="Data/Hora">${formatDateTime(dataHora)}</td>
+                <td data-label="Especialidade">${consulta.medico?.especialidade?.nome || 'N/A'}</td>
+                <td data-label="Médico">${consulta.medico?.nome || 'N/A'}</td>
+                <td data-label="Ações">
                     <a href="consultas.html" style="color: var(--secondary-color);">Ver detalhes</a>
                 </td>
             </tr>
