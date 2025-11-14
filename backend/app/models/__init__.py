@@ -8,7 +8,8 @@ from app.models.models import (
     HorarioTrabalho,
     Consulta,
     Observacao,
-    BloqueioHorario
+    BloqueioHorario,
+    TipoUsuario
 )
 
 __all__ = [
@@ -21,5 +22,6 @@ __all__ = [
     "HorarioTrabalho",
     "Consulta",
     "Observacao",
-    "BloqueioHorario"
+    "BloqueioHorario",
+    "TipoUsuario"
 ]

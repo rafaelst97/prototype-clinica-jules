@@ -4,6 +4,11 @@ from datetime import datetime
 import enum
 from app.database import Base
 
+class TipoUsuario(str, enum.Enum):
+    ADMIN = "admin"
+    MEDICO = "medico"
+    PACIENTE = "paciente"
+
 class StatusConsulta(str, enum.Enum):
     AGENDADA = "agendada"
     CONFIRMADA = "confirmada"
